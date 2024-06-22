@@ -19,11 +19,11 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.HW_SSH_PRIVATE_KEY }}
           ARGS: "-avz --delete"
           SOURCE: "./"  # 更改为你要部署的文件夹
-          TARGET: "/home/test/"
+          TARGET: "/home/"
           EXCLUDE: "/node_modules/"
           REMOTE_HOST: ${{ secrets.HW_HOST }}
           REMOTE_USER: ${{ secrets.HW_USER }}
           REMOTE_PORT: ${{ secrets.HW_PORT }}  # 如果不是默认的22端口，需要更改
           SCRIPT_AFTER: |
-            touch test.txt
+            ls
 
