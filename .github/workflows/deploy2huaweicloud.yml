@@ -1,0 +1,60 @@
+name: Deploy to Cloud Server
+
+on:
+  push:
+    branches:
+      - release
+ 
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+
+      - name: Install npm dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run build task
+        env:
+            VITE_BACKEND_SERVICE_URL: ${{ secrets.BACKEND_SERVICE_URL }}
+        run: |
+          pnpm build-share
+          pnpm build-api-server
+          pnpm build-website
+
+      - name: Deploy 🚀
+        uses: easingthemes/ssh-deploy@v5.0.3
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          ARGS: "-avz --delete"
+          SOURCE: "./"  # 更改为你要部署的文件夹
+          TARGET: "/home/oss-evaluation-service/"
+          EXCLUDE: "/node_modules/"
+          REMOTE_HOST: ${{ secrets.ALIYUN_HOST }}
+          REMOTE_USER: ${{ secrets.ALIYUN_USER }}
+          REMOTE_PORT: ${{ secrets.ALIYUN_PORT }}  # 如果不是默认的22端口，需要更改
+          SCRIPT_AFTER: |
+            export DATABASE_URL=${{ secrets.DATABASE_URL }}
+            export VITE_BACKEND_SERVICE_URL=${{ secrets.BACKEND_SERVICE_URL }}
+            export PATH=$PATH:/root/.nvm/versions/node/v21.6.2/bin
+            pm2 stop all
+            cd /home/oss-evaluation-service/packages/api-server
+            pm2 start ./dist/app.js --watch
+            cd /home/oss-evaluation-service/packages/integration
+            pm2 start ./bin/www.js --watch
+            nginx -s reload
+
