@@ -1,4 +1,4 @@
-name: Deploy to HW Cloud Server
+name: Deploy to BT Cloud Server
 
 on:
   push:
@@ -16,14 +16,14 @@ jobs:
       - name: Deploy 🚀
         uses: easingthemes/ssh-deploy@v5.0.3
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.HW_SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.BT_SSH_PRIVATE_KEY }}
           ARGS: "-avz --delete"
           SOURCE: "./"  # 更改为你要部署的文件夹
           TARGET: "/home/test/"
           EXCLUDE: "/node_modules/"
-          REMOTE_HOST: ${{ secrets.HW_HOST }}
-          REMOTE_USER: ${{ secrets.HW_USER }}
-          REMOTE_PORT: ${{ secrets.HW_PORT }}  # 如果不是默认的22端口，需要更改
+          REMOTE_HOST: ${{ secrets.BT_HOST }}
+          REMOTE_USER: ${{ secrets.BT_USER }}
+          REMOTE_PORT: ${{ secrets.BT_PORT }}  # 如果不是默认的22端口，需要更改
           SCRIPT_AFTER: |
             touch test.txt
 
