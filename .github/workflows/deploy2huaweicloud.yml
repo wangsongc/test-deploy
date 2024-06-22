@@ -24,6 +24,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.HW_HOST }}
           REMOTE_USER: ${{ secrets.HW_USER }}
           REMOTE_PORT: ${{ secrets.HW_PORT }}  # 如果不是默认的22端口，需要更改
+          SCRIPT_BEFORE: ls
           SCRIPT_AFTER: |
             ls
 

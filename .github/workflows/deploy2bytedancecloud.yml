@@ -24,6 +24,7 @@ jobs:
           REMOTE_HOST: "101.126.17.182"
           REMOTE_USER: "root"
           REMOTE_PORT: 22 # 如果不是默认的22端口，需要更改
+          SCRIPT_BEFORE: ls
           SCRIPT_AFTER: |
             ls
 
