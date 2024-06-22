@@ -21,9 +21,9 @@ jobs:
           SOURCE: "./"  # 更改为你要部署的文件夹
           TARGET: "/home/"
           EXCLUDE: "/node_modules/"
-          REMOTE_HOST: ${{ secrets.BT_HOST }}
-          REMOTE_USER: ${{ secrets.BT_USER }}
-          REMOTE_PORT: ${{ secrets.BT_PORT }}  # 如果不是默认的22端口，需要更改
+          REMOTE_HOST: "101.126.17.182"
+          REMOTE_USER: "root"
+          REMOTE_PORT: 22 # 如果不是默认的22端口，需要更改
           SCRIPT_AFTER: |
             ls
 
